@@ -6,7 +6,7 @@
 /*   By: aelbour <aelbour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 13:23:26 by aelbour           #+#    #+#             */
-/*   Updated: 2025/07/11 13:01:15 by aelbour          ###   ########.fr       */
+/*   Updated: 2025/07/11 13:03:06 by aelbour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	search_for_dead_bodies(t_data *data)
 	while (--i >= 0)
 	{
 		if (philo_get_time() - data->philos[i].last_meal_time  \
-		> data->time_to_die && !data->philos)
+		> data->time_to_die && !data->philos[i].still_eating)
 		{			
 			pthread_mutex_lock(&data->death_lock);
 			data->stop = 1;
