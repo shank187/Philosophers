@@ -6,7 +6,8 @@ CFLAGS	= -Wall -Wextra -Werror -pthread -g
 SRC		= main.c \
 		  parsing.c \
 		  philo_utils.c \
-		  libft_utils.c
+		  libft_utils.c \
+		  routine.c
 
 OBJ		= $(SRC:.c=.o)
 

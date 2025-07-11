@@ -6,7 +6,7 @@
 /*   By: aelbour <aelbour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:38:54 by aelbour           #+#    #+#             */
-/*   Updated: 2025/07/09 16:59:49 by aelbour          ###   ########.fr       */
+/*   Updated: 2025/07/11 08:53:30 by aelbour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	ft_atoi(const char *str, int *error)
 			return (*error = 1, -1);
 		oldt = t;
 	}
-	if (str[i])
+	if (str[i] || !(int) t)
 		*error = 1;
 	return ((int)t);
 }
