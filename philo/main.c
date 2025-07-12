@@ -6,7 +6,7 @@
 /*   By: aelbour <aelbour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:58:34 by aelbour           #+#    #+#             */
-/*   Updated: 2025/07/11 12:56:32 by aelbour          ###   ########.fr       */
+/*   Updated: 2025/07/12 15:58:40 by aelbour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,13 @@ void *routine_philo(void *param)
 	while (are_u_alives(philo->data))
 	{
 		if(philo->id % 2)
-			usleep(100);
+			usleep(1000);
 		forks_pickup(philo);
 		eating_pastaa(philo);
 		if (philo->meals_eaten == philo->data->meals_required)
 			pthread_exit(NULL);
 		safe_printf("is sleeping", philo);
-		if (!ft_usleep(philo->data->time_to_sleep, philo->data))
+		if (!ft_usleep(philo->data->time_to_sleep * 1000, philo->data))
 			pthread_exit(NULL);
 		safe_printf("is thinking", philo);
 	}

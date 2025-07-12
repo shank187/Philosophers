@@ -6,7 +6,7 @@
 /*   By: aelbour <aelbour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 13:23:26 by aelbour           #+#    #+#             */
-/*   Updated: 2025/07/11 13:03:06 by aelbour          ###   ########.fr       */
+/*   Updated: 2025/07/12 15:57:04 by aelbour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void forks_pickup(t_philo * philo)
 void eating_pastaa(t_philo *philo)
 {
 	safe_printf("is eating", philo);
-	if (!ft_usleep(philo->data->time_to_eat, philo->data))
+	if (!ft_usleep(philo->data->time_to_eat * 1000, philo->data))
 	{
 		pthread_mutex_unlock(philo->right_fork);
 		pthread_mutex_unlock(philo->left_fork);
