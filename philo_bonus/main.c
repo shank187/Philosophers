@@ -6,7 +6,7 @@
 /*   By: aelbour <aelbour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:58:34 by aelbour           #+#    #+#             */
-/*   Updated: 2025/07/12 16:16:03 by aelbour          ###   ########.fr       */
+/*   Updated: 2025/07/12 16:34:27 by aelbour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ int main(int ac, char **av)
 		else if (data->philos[i].child_pid == 0)
 			routine_philo(&data->philos[i]);
 	}
+	restaurant_guard(data);
 	clean_resources(data, 0);
 	return (0);
 }
