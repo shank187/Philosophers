@@ -6,7 +6,7 @@
 /*   By: aelbour <aelbour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:58:34 by aelbour           #+#    #+#             */
-/*   Updated: 2025/07/12 16:34:27 by aelbour          ###   ########.fr       */
+/*   Updated: 2025/07/12 16:40:14 by aelbour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,8 @@ void clean_resources(t_data *data, int is_child)
 	free(data);
 }
 
-int treat_exits(t_data *data)
+int treat_exits(t_data *data, int status)
 {
-	int status;
 	int i;
 	int exit_code;
 
@@ -61,14 +60,10 @@ void restaurant_guard(t_data *data)
 					kill(data->philos[i].child_pid, SIGKILL);
 				while (waitpid(-1, &status, 0) > 0);			
 			}
-			// else
-			// {
-			// 	fprintf(stderr, "here\n");
-			// }
 			break ;
 		}
 		else if (WIFEXITED(status))
-			if(treat_exits(data))
+			if(treat_exits(data, status))
 				break ;
 	}
 }
