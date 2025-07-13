@@ -12,13 +12,24 @@
 
 #include "philo.h"
 
+void handle_crushes(t_data *data)
+{
+	free(data->forks);
+	free(data->philos);
+	free(data);
+	write(2, "A FUNCTION FAILED !!\n", 2);
+	exit(1);
+}
+
 int safe_printf(char *str, t_philo *philo)
 {
 	if(are_u_alives(philo->data))
 	{
-		pthread_mutex_lock(&philo->data->print_lock);
+		if (pthread_mutex_lock(&philo->data->print_lock))
+			handle_crushes(philo->data);
 		printf("%lld %i %s\n", philo_get_time() - philo->data->start_time, philo->id, str);
-		pthread_mutex_unlock(&philo->data->print_lock);
+		if (pthread_mutex_unlock(&philo->data->print_lock))
+			handle_crushes(philo->data);
 		return (1);
 	}	
 	return (0);
@@ -28,16 +39,24 @@ int are_u_alives(t_data *data)
 {
 	pthread_mutex_lock(&data->death_lock);
 	if(!data->stop)
-		return (pthread_mutex_unlock(&data->death_lock), 1);
+	{
+		if (pthread_mutex_unlock(&data->death_lock))
+			handle_crushes(data);
+		return (1);
+	}
 	else
-		return (pthread_mutex_unlock(&data->death_lock), 0);
+	{
+		if (pthread_mutex_unlock(&data->death_lock))
+			handle_crushes(data);
+		return (0);
+	}
 }
 
 long long philo_get_time()
 {
 	struct timeval tv;
 	long long ms_time;
-
+  
 	if (gettimeofday(&tv, NULL) == -1)
 		return (-1);
 	ms_time = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
@@ -53,7 +72,8 @@ int	ft_usleep(size_t milliseconds, t_data *data)
 	{
 		if (!are_u_alives(data))
 			return (0);
-		usleep(1000);
+		if (usleep(1000))
+			handle_crushes(data);
 	}
 	return (1);
 }

@@ -14,9 +14,11 @@
 
 void died_lonely_philo(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->data->print_lock);
+	if (pthread_mutex_lock(&philo->data->print_lock))
+		handle_crushes(philo->data);
 	printf("%lld %i has taken a fork\n", philo_get_time() - philo->data->start_time, philo->id);
-	pthread_mutex_unlock(&philo->data->print_lock);
+	if (pthread_mutex_unlock(&philo->data->print_lock))
+		handle_crushes(philo->data);
 	pthread_exit(NULL);
 }
 
@@ -73,7 +75,7 @@ int main(int ac, char **av)
 		else
 			data->philos[i].last_meal_time = philo_get_time();
 	}
-	usleep(100);
+	ft_usleep(1, data);
 	threads_waiter(data);
 	clean_up_simulation(data, data->num_philos);
 	return (0);

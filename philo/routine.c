@@ -16,16 +16,20 @@ void forks_pickup(t_philo * philo)
 {
 	if (philo->id == philo->data->num_philos) 
 	{
-		pthread_mutex_lock(philo->right_fork);
+		if (pthread_mutex_lock(philo->right_fork))
+			handle_crushes(philo->data);
 		safe_printf("has taken a fork", philo);
-		pthread_mutex_lock(philo->left_fork);
+		if (pthread_mutex_lock(philo->left_fork))
+			handle_crushes(philo->data);
 		safe_printf("has taken a fork", philo);
 	}
 	else
 	{
-		pthread_mutex_lock(philo->left_fork);
+		if (pthread_mutex_lock(philo->left_fork))
+			handle_crushes(philo->data);
 		safe_printf("has taken a fork", philo);
-		pthread_mutex_lock(philo->right_fork);
+		if (pthread_mutex_lock(philo->right_fork))
+			handle_crushes(philo->data);
 		safe_printf("has taken a fork", philo);
 	}
 }
@@ -36,12 +40,16 @@ void eating_pastaa(t_philo *philo)
 	philo->last_meal_time = philo_get_time();
 	if (!ft_usleep(philo->data->time_to_eat , philo->data))
 	{
-		pthread_mutex_unlock(philo->right_fork);
-		pthread_mutex_unlock(philo->left_fork);
+		if (pthread_mutex_unlock(philo->right_fork))
+			handle_crushes(philo->data);
+		if (pthread_mutex_unlock(philo->left_fork))
+			handle_crushes(philo->data);
 		pthread_exit(NULL);
 	}
-	pthread_mutex_unlock(philo->left_fork);
-	pthread_mutex_unlock(philo->right_fork);
+	if (pthread_mutex_unlock(philo->left_fork))
+		handle_crushes(philo->data);
+	if (pthread_mutex_unlock(philo->right_fork))
+		handle_crushes(philo->data);
 	philo->meals_eaten++;
 }
 
@@ -55,12 +63,16 @@ int	search_for_dead_bodies(t_data *data)
 		if (philo_get_time() - data->philos[i].last_meal_time  \
 		> data->time_to_die)
 		{			
-			pthread_mutex_lock(&data->death_lock);
+			if (pthread_mutex_lock(&data->death_lock))
+				handle_crushes(data);
 			data->stop = 1;
-			pthread_mutex_unlock(&data->death_lock);
-			pthread_mutex_lock(&data->print_lock);
+			if (pthread_mutex_unlock(&data->death_lock))
+				handle_crushes(data);
+			if (pthread_mutex_lock(&data->print_lock))
+				handle_crushes(data);
 			printf("%lld %i died\n", philo_get_time() - data->start_time, data->philos[i].id);
-			pthread_mutex_unlock(&data->print_lock);
+			if (pthread_mutex_unlock(&data->print_lock))
+				handle_crushes(data);
 			return (1);
 		}
 	}

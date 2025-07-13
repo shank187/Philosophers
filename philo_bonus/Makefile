@@ -1,7 +1,7 @@
 NAME	= philo_bonus
 
 CC		= cc
-CFLAGS	= -Wall -Wextra -Werror -pthread -g
+CFLAGS	= -Wall -Wextra -Werror -pthread
 
 SRC		= main.c \
 		  parsing.c \
