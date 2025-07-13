@@ -6,7 +6,7 @@
 /*   By: aelbour <aelbour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 13:23:26 by aelbour           #+#    #+#             */
-/*   Updated: 2025/07/12 15:57:04 by aelbour          ###   ########.fr       */
+/*   Updated: 2025/07/13 10:55:24 by aelbour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,22 @@ void forks_pickup(t_philo * philo)
 		pthread_mutex_lock(philo->right_fork);
 		safe_printf("has taken a fork", philo);
 		pthread_mutex_lock(philo->left_fork);
-		if(safe_printf("has taken a fork", philo))
-			philo->still_eating = 1;
+		safe_printf("has taken a fork", philo);
 	}
 	else
 	{
 		pthread_mutex_lock(philo->left_fork);
 		safe_printf("has taken a fork", philo);
 		pthread_mutex_lock(philo->right_fork);
-		if(safe_printf("has taken a fork", philo))
-			philo->still_eating = 1;
+		safe_printf("has taken a fork", philo);
 	}
 }
 
 void eating_pastaa(t_philo *philo)
 {
 	safe_printf("is eating", philo);
-	if (!ft_usleep(philo->data->time_to_eat * 1000, philo->data))
+	philo->last_meal_time = philo_get_time();
+	if (!ft_usleep(philo->data->time_to_eat , philo->data))
 	{
 		pthread_mutex_unlock(philo->right_fork);
 		pthread_mutex_unlock(philo->left_fork);
@@ -43,9 +42,7 @@ void eating_pastaa(t_philo *philo)
 	}
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
-	philo->last_meal_time = philo_get_time();
 	philo->meals_eaten++;
-	philo->still_eating = 0;
 }
 
 int	search_for_dead_bodies(t_data *data)
@@ -56,7 +53,7 @@ int	search_for_dead_bodies(t_data *data)
 	while (--i >= 0)
 	{
 		if (philo_get_time() - data->philos[i].last_meal_time  \
-		> data->time_to_die && !data->philos[i].still_eating)
+		> data->time_to_die)
 		{			
 			pthread_mutex_lock(&data->death_lock);
 			data->stop = 1;
@@ -87,7 +84,7 @@ int is_all_satisfied(t_data *data)
 	return(0);
 }
 
-void	threads_guard(t_data *data)
+void	threads_waiter(t_data *data)
 {
 	while (1)
 	{

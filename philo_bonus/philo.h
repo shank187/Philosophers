@@ -6,7 +6,7 @@
 /*   By: aelbour <aelbour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:27:13 by aelbour           #+#    #+#             */
-/*   Updated: 2025/07/12 16:13:12 by aelbour          ###   ########.fr       */
+/*   Updated: 2025/07/13 11:00:12 by aelbour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ typedef struct s_philo
 	pid_t			child_pid;
 	atomic_int		meals_eaten;
 	atomic_llong	last_meal_time;
-	atomic_int		still_eating;
 	t_data			*data;
 }	t_philo;
 

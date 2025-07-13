@@ -6,7 +6,7 @@
 /*   By: aelbour <aelbour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 13:23:26 by aelbour           #+#    #+#             */
-/*   Updated: 2025/07/12 16:13:32 by aelbour          ###   ########.fr       */
+/*   Updated: 2025/07/13 11:27:26 by aelbour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,50 +28,61 @@ void died_lonely_philo(t_philo *philo)
 int am_i_alive(t_philo *philo)
 {
 	if (philo_get_time() - philo->last_meal_time  \
-	> philo->data->time_to_die && !philo->still_eating)
+	> philo->data->time_to_die)
 		return (0);
 	return (1);
 }
 
 void forks_pickup(t_philo * philo)
 {
-	if (philo->id == philo->data->num_philos) 
-	{
-		sem_wait(philo->data->forks);
-		safe_printf("has taken a fork", philo);
-		sem_wait(philo->data->forks);
-		safe_printf("has taken a fork", philo);
-		philo->still_eating = 1;
-	}
+	sem_wait(philo->data->forks);
+	safe_printf("has taken a fork", philo);
+	sem_wait(philo->data->forks);
+	safe_printf("has taken a fork", philo);
 }
 
 void eating_pastaa(t_philo *philo)
 {
 	safe_printf("is eating", philo);
-	if (usleep(philo->data->time_to_eat))
-	{
-		sem_post(philo->data->forks);
-		sem_post(philo->data->forks);
-		exit(0);
-	}
-	sem_post(philo->data->forks);
-	sem_post(philo->data->forks);
 	philo->last_meal_time = philo_get_time();
+	ft_usleep(philo->data->time_to_eat, philo);
+	sem_post(philo->data->forks);
+	sem_post(philo->data->forks);
 	philo->meals_eaten++;
-	philo->still_eating = 0;
 }
 
+
+// void *ft_ripper(void *param)
+// {
+// 	t_philo *philo;
+
+// 	philo = (t_philo*) param;
+// 	while(1)
+// 	{
+// 		if(philo_get_time() - philo->last_meal_time > philo->data->time_to_die)
+// 		{
+// 			clean_resources(philo->data, 1);
+// 			fprintf(stderr, "\n==================================================");
+// 			fprintf(stderr, "==================================================\n");
+// 			exit(philo->id);
+// 		}
+// 		usleep(50);
+// 	}
+// 	return (NULL);
+// }
 void routine_philo(t_philo *philo)
 {
 	int i;
+	// pthread_t ripper;
+	// pthread_create(&ripper, NULL, &ft_ripper, philo);
 
-	philo->last_meal_time = philo_get_time();
 	if (philo->data->num_philos == 1)
 		died_lonely_philo(philo);
+	philo->last_meal_time = philo_get_time();
 	while (am_i_alive(philo))
 	{
 		if(philo->id % 2)
-			ft_usleep(100, philo);
+			ft_usleep(1, philo);
 		forks_pickup(philo);
 		eating_pastaa(philo);
 		if (philo->meals_eaten == philo->data->meals_required)

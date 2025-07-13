@@ -6,7 +6,7 @@
 /*   By: aelbour <aelbour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 15:40:43 by aelbour           #+#    #+#             */
-/*   Updated: 2025/07/12 15:55:47 by aelbour          ###   ########.fr       */
+/*   Updated: 2025/07/13 11:25:06 by aelbour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	ft_usleep(size_t milliseconds, t_data *data)
 	{
 		if (!are_u_alives(data))
 			return (0);
-		usleep(100);
+		usleep(1000);
 	}
 	return (1);
 }

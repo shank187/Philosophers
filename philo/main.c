@@ -6,7 +6,7 @@
 /*   By: aelbour <aelbour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:58:34 by aelbour           #+#    #+#             */
-/*   Updated: 2025/07/12 15:58:40 by aelbour          ###   ########.fr       */
+/*   Updated: 2025/07/13 11:30:25 by aelbour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,13 @@ void *routine_philo(void *param)
 	while (are_u_alives(philo->data))
 	{
 		if(philo->id % 2)
-			usleep(1000);
+			ft_usleep(1, philo->data);
 		forks_pickup(philo);
 		eating_pastaa(philo);
 		if (philo->meals_eaten == philo->data->meals_required)
 			pthread_exit(NULL);
 		safe_printf("is sleeping", philo);
-		if (!ft_usleep(philo->data->time_to_sleep * 1000, philo->data))
+		if (!ft_usleep(philo->data->time_to_sleep, philo->data))
 			pthread_exit(NULL);
 		safe_printf("is thinking", philo);
 	}
@@ -73,8 +73,8 @@ int main(int ac, char **av)
 		else
 			data->philos[i].last_meal_time = philo_get_time();
 	}
-	ft_usleep(8, data);
-	threads_guard(data);
+	usleep(100);
+	threads_waiter(data);
 	clean_up_simulation(data, data->num_philos);
 	return (0);
 }

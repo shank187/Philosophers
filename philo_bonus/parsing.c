@@ -6,7 +6,7 @@
 /*   By: aelbour <aelbour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:30:25 by aelbour           #+#    #+#             */
-/*   Updated: 2025/07/12 14:43:43 by aelbour          ###   ########.fr       */
+/*   Updated: 2025/07/13 11:00:55 by aelbour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ int	init_philo_tools(t_data *data)
 		data->philos[i].id = i + 1;
 		data->philos[i].meals_eaten = 0;
 		data->philos[i].data = data;
-		data->philos[i].still_eating = 0;
 	}
 	return (1);
 }

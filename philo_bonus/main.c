@@ -6,7 +6,7 @@
 /*   By: aelbour <aelbour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:58:34 by aelbour           #+#    #+#             */
-/*   Updated: 2025/07/12 16:40:14 by aelbour          ###   ########.fr       */
+/*   Updated: 2025/07/13 10:00:19 by aelbour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int treat_exits(t_data *data, int status)
 	exit_code = WEXITSTATUS(status);
 	if (exit_code)
 	{
-		// sem_wait(data->print_lock);
 		i = -1;
 		while (++i < data->num_philos)
 			kill(data->philos[i].child_pid, SIGKILL);

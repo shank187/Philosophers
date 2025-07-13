@@ -6,7 +6,7 @@
 /*   By: aelbour <aelbour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:27:13 by aelbour           #+#    #+#             */
-/*   Updated: 2025/07/12 09:39:10 by aelbour          ###   ########.fr       */
+/*   Updated: 2025/07/13 10:54:39 by aelbour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ typedef struct s_philo
 	int				id;             
 	atomic_int		meals_eaten;
 	atomic_llong	last_meal_time;
-	atomic_int		still_eating;
 	pthread_t		thread;
 
 	pthread_mutex_t	*left_fork;
@@ -59,7 +58,7 @@ int are_u_alives(t_data *data);
 int safe_printf(char *str, t_philo *philo);
 void forks_pickup(t_philo * philo);
 void eating_pastaa(t_philo *philo);
-void	threads_guard(t_data *data);
+void	threads_waiter(t_data *data);
 void ft_cleanup_forks(t_data *data, int up_to);
 void ft_cleanup_table(t_data *data, int up_to);
 

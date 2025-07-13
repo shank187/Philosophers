@@ -6,7 +6,7 @@
 /*   By: aelbour <aelbour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 15:40:43 by aelbour           #+#    #+#             */
-/*   Updated: 2025/07/12 16:37:53 by aelbour          ###   ########.fr       */
+/*   Updated: 2025/07/13 11:25:43 by aelbour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ void	ft_usleep(size_t millisecond, t_philo *philo)
 	start = philo_get_time();
 	while ((philo_get_time() - start) < millisecond)
 	{
-		if (usleep(50) || !am_i_alive(philo))
-			return (clean_resources(philo->data, 1), fprintf(stderr,"the philo returned id is %i\n", i), exit(i));
+		if (!am_i_alive(philo))
+			return (clean_resources(philo->data, 1), exit(i));
+		usleep(1000);
 	}
 }
