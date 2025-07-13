@@ -76,7 +76,7 @@ To compile and run the Philosopher project, follow these steps:
 
 **Compilation:**
 
-Clone the repository (if applicable) and navigate to the project directory.
+Clone the repository (if applicable) and navigate to the project directory (philo OR philo_bonus).
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/shank187/Philosophers
 cd philosopher
