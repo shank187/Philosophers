@@ -46,13 +46,12 @@ void	*routine_philo(void *param)
 	return (NULL);
 }
 
-void	clean_up_simulation(t_data *data, int i)
+void	clean_up_simulation(t_data *data)
 {
 	int	j;
 
 	j = data->crush;
 	ft_cleanup_forks(data, data->num_philos);
-	ft_cleanup_table(data, i);
 	pthread_mutex_destroy(&data->death_lock);
 	pthread_mutex_destroy(&data->print_lock);
 	free(data->forks);
@@ -74,13 +73,16 @@ int	main(int ac, char **av)
 	{
 		if (pthread_create(&data->philos[i].thread, \
 			NULL, routine_philo, &data->philos[i]))
-			return (clean_up_simulation(data, i), 1);
+			return (clean_up_simulation(data), 1);
 		else
+		{
+			pthread_detach(data->philos[i].thread);
 			data->philos[i].last_meal_time = philo_get_time();
+		}
 	}
 	ft_usleep(1, data);
 	threads_waiter(data);
 	i = data->crush;
-	clean_up_simulation(data, data->num_philos);
+	clean_up_simulation(data);
 	return (i);
 }

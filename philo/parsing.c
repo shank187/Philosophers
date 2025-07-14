@@ -12,17 +12,6 @@
 
 #include "philo.h"
 
-void	ft_cleanup_table(t_data *data, int up_to)
-{
-	int	i;
-
-	i = -1;
-	while (++i < up_to)
-	{
-		pthread_detach(data->philos[i].thread);
-	}
-}
-
 void	ft_cleanup_forks(t_data *data, int up_to)
 {
 	int	i;
