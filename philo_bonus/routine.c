@@ -12,76 +12,62 @@
 
 #include "philo.h"
 
-void died_lonely_philo(t_philo *philo)
+void	died_lonely_philo(t_philo *philo)
 {
-	int i;
+	int	i;
 
 	i = philo->id;
-	sem_wait(philo->data->print_lock);
-	printf("%lld %i has taken a fork\n", philo_get_time() - philo->data->start_time, philo->id);
-	sem_post(philo->data->print_lock);
-	ft_usleep(philo->data->time_to_die ,philo);
+	if (sem_wait(philo->data->print_lock))
+		handle_crushes(philo->data, 1);
+	printf("%lld %i has taken a fork\n", philo_get_time() - \
+		philo->data->start_time, philo->id);
+	if (sem_post(philo->data->print_lock))
+		handle_crushes(philo->data, 1);
+	ft_usleep(philo->data->time_to_die, philo);
 	clean_resources(philo->data, 1);
 	exit(i);
 }
 
-int am_i_alive(t_philo *philo)
+int	am_i_alive(t_philo *philo)
 {
-	if (philo_get_time() - philo->last_meal_time  \
+	if (philo_get_time() - philo->last_meal_time \
 	> philo->data->time_to_die)
 		return (0);
 	return (1);
 }
 
-void forks_pickup(t_philo * philo)
+void	forks_pickup(t_philo *philo)
 {
-	sem_wait(philo->data->forks);
+	if (sem_wait(philo->data->forks))
+		handle_crushes(philo->data, 1);
 	safe_printf("has taken a fork", philo);
-	sem_wait(philo->data->forks);
+	if (sem_wait(philo->data->forks))
+		handle_crushes(philo->data, 1);
 	safe_printf("has taken a fork", philo);
 }
 
-void eating_pastaa(t_philo *philo)
+void	eating_pastaa(t_philo *philo)
 {
 	safe_printf("is eating", philo);
 	philo->last_meal_time = philo_get_time();
 	ft_usleep(philo->data->time_to_eat, philo);
-	sem_post(philo->data->forks);
-	sem_post(philo->data->forks);
+	if (sem_post(philo->data->forks))
+		handle_crushes(philo->data, 1);
+	if (sem_post(philo->data->forks))
+		handle_crushes(philo->data, 1);
 	philo->meals_eaten++;
 }
 
-
-// void *ft_ripper(void *param)
-// {
-// 	t_philo *philo;
-
-// 	philo = (t_philo*) param;
-// 	while(1)
-// 	{
-// 		if(philo_get_time() - philo->last_meal_time > philo->data->time_to_die)
-// 		{
-// 			clean_resources(philo->data, 1);
-// 			fprintf(stderr, "\n==================================================");
-// 			fprintf(stderr, "==================================================\n");
-// 			exit(philo->id);
-// 		}
-// 		usleep(50);
-// 	}
-// 	return (NULL);
-// }
-void routine_philo(t_philo *philo)
+void	routine_philo(t_philo *philo)
 {
-	int i;
-	// pthread_t ripper;
-	// pthread_create(&ripper, NULL, &ft_ripper, philo);
+	int	i;
 
 	if (philo->data->num_philos == 1)
 		died_lonely_philo(philo);
 	philo->last_meal_time = philo_get_time();
 	while (am_i_alive(philo))
 	{
-		if(philo->id % 2)
+		if (philo->id % 2)
 			ft_usleep(1, philo);
 		forks_pickup(philo);
 		eating_pastaa(philo);

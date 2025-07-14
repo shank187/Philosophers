@@ -13,25 +13,23 @@
 #ifndef PHILO_H
 # define PHILO_H
 
-#include <stdio.h>
-#include <unistd.h>
-#include <pthread.h>
-#include <stdlib.h>
-#include <sys/time.h>
-#include <stdatomic.h> 
+# include <stdio.h>
+# include <unistd.h>
+# include <pthread.h>
+# include <stdlib.h>
+# include <sys/time.h>
+# include <stdatomic.h> 
 
-typedef struct s_data  t_data;
-
+typedef struct s_data	t_data;
 
 typedef struct s_philo
 {
-	int				id;             
+	int				id;
 	atomic_int		meals_eaten;
 	atomic_llong	last_meal_time;
 	pthread_t		thread;
-
 	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*right_fork; 
+	pthread_mutex_t	*right_fork;
 	t_data			*data;
 }	t_philo;
 
@@ -42,25 +40,26 @@ typedef struct s_data
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				meals_required;
-	_Atomic int		stop;
+	atomic_int		stop;
 	long long		start_time;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print_lock;
 	pthread_mutex_t	death_lock;
+	atomic_int		crush;
 	t_philo			*philos;
 }	t_data;
 
 int			ft_atoi(const char *str, int *error);
 int			parse_init(int ac, char **av, t_data *data);
-long long	philo_get_time();
-int	ft_usleep(size_t milliseconds, t_data *data);
-int are_u_alives(t_data *data);
-int safe_printf(char *str, t_philo *philo);
-void forks_pickup(t_philo * philo);
-void eating_pastaa(t_philo *philo);
-void	threads_waiter(t_data *data);
-void ft_cleanup_forks(t_data *data, int up_to);
-void ft_cleanup_table(t_data *data, int up_to);
-void handle_crushes(t_data *data);
+long long	philo_get_time(void);
+int			ft_usleep(size_t milliseconds, t_data *data);
+int			are_u_alives(t_data *data);
+int			safe_printf(char *str, t_philo *philo);
+void		forks_pickup(t_philo *philo);
+void		eating_pastaa(t_philo *philo);
+void		threads_waiter(t_data *data);
+void		ft_cleanup_forks(t_data *data, int up_to);
+void		ft_cleanup_table(t_data *data, int up_to);
+void		handle_crushes(t_data *data);
 
 #endif

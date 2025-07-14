@@ -12,17 +12,34 @@
 
 #include "philo.h"
 
-void safe_printf(char *str, t_philo *philo)
+void	handle_crushes(t_data *data, int is_child)
 {
-	sem_wait(philo->data->print_lock);
-	printf("%lld %i %s\n", philo_get_time() - philo->data->start_time, philo->id, str);
-	sem_post(philo->data->print_lock);
+	if (!is_child)
+	{
+		sem_unlink("forks");
+		sem_unlink("print");
+	}
+	free(data->forks);
+	free(data->philos);
+	free(data);
+	write(2, "A FUNCTION FAILED !!\n", 21);
+	exit(!is_child);
 }
 
-long long philo_get_time()
+void	safe_printf(char *str, t_philo *philo)
 {
-	struct timeval tv;
-	long long ms_time;
+	if (sem_wait(philo->data->print_lock))
+		handle_crushes(philo->data, 1);
+	printf("%lld %i %s\n", philo_get_time() - \
+		philo->data->start_time, philo->id, str);
+	if (sem_post(philo->data->print_lock))
+		handle_crushes(philo->data, 1);
+}
+
+long long	philo_get_time(void)
+{
+	struct timeval	tv;
+	long long		ms_time;
 
 	if (gettimeofday(&tv, NULL) == -1)
 		return (-1);
@@ -33,14 +50,15 @@ long long philo_get_time()
 void	ft_usleep(size_t millisecond, t_philo *philo)
 {
 	size_t	start;
-	int i;
+	int		i;
 
-	i =  philo->id;
+	i = philo->id;
 	start = philo_get_time();
 	while ((philo_get_time() - start) < millisecond)
 	{
 		if (!am_i_alive(philo))
 			return (clean_resources(philo->data, 1), exit(i));
-		usleep(1000);
+		if (usleep(1000))
+			handle_crushes(philo->data, 1);
 	}
 }

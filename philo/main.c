@@ -12,43 +12,48 @@
 
 #include "philo.h"
 
-void died_lonely_philo(t_philo *philo)
+void	died_lonely_philo(t_philo *philo)
 {
 	if (pthread_mutex_lock(&philo->data->print_lock))
-		handle_crushes(philo->data);
-	printf("%lld %i has taken a fork\n", philo_get_time() - philo->data->start_time, philo->id);
+		return (philo->data->crush = 1, pthread_exit(NULL));
+	printf("%lld %i has taken a fork\n", philo_get_time() - \
+			philo->data->start_time, philo->id);
 	if (pthread_mutex_unlock(&philo->data->print_lock))
-		handle_crushes(philo->data);
+		return (philo->data->crush = 1, pthread_exit(NULL));
 	pthread_exit(NULL);
 }
 
-void *routine_philo(void *param)
+void	*routine_philo(void *param)
 {
 	t_philo	*philo;
 
-	philo = (t_philo*)param;
-	// philo->last_meal_time = philo_get_time();
+	philo = (t_philo *) param;
 	if (philo->data->num_philos == 1)
 		died_lonely_philo(philo);
 	while (are_u_alives(philo->data))
 	{
-		if(philo->id % 2)
+		if (philo->id % 2)
 			ft_usleep(1, philo->data);
 		forks_pickup(philo);
 		eating_pastaa(philo);
 		if (philo->meals_eaten == philo->data->meals_required)
 			pthread_exit(NULL);
-		safe_printf("is sleeping", philo);
+		if (are_u_alives(philo->data))
+			safe_printf("is sleeping", philo);
 		if (!ft_usleep(philo->data->time_to_sleep, philo->data))
 			pthread_exit(NULL);
-		safe_printf("is thinking", philo);
+		if (are_u_alives(philo->data))
+			safe_printf("is thinking", philo);
 	}
 	pthread_exit(NULL);
 	return (NULL);
 }
 
-void clean_up_simulation(t_data *data, int i)
+void	clean_up_simulation(t_data *data, int i)
 {
+	int	j;
+
+	j = data->crush;
 	ft_cleanup_forks(data, data->num_philos);
 	ft_cleanup_table(data, i);
 	pthread_mutex_destroy(&data->death_lock);
@@ -56,22 +61,24 @@ void clean_up_simulation(t_data *data, int i)
 	free(data->forks);
 	free(data->philos);
 	free(data);
+	exit(j);
 }
 
-int main(int ac, char **av)
+int	main(int ac, char **av)
 {
-	t_data *data;
-	int i;
+	t_data	*data;
+	int		i;
 
 	i = -1;
 	data = malloc(sizeof(t_data));
 	if (!data || !parse_init(ac, av, data))
-		return(free(data), 1);
+		return (free(data), 1);
 	data->start_time = philo_get_time();
 	while (++i < data->num_philos)
 	{
-		if(pthread_create(&data->philos[i].thread, NULL, routine_philo,  &data->philos[i]))
-			return(clean_up_simulation(data, i), 1);
+		if (pthread_create(&data->philos[i].thread, \
+			NULL, routine_philo, &data->philos[i]))
+			return (clean_up_simulation(data, i), 1);
 		else
 			data->philos[i].last_meal_time = philo_get_time();
 	}

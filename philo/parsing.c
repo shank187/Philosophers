@@ -12,29 +12,29 @@
 
 #include "philo.h"
 
-void ft_cleanup_table(t_data *data, int up_to)
+void	ft_cleanup_table(t_data *data, int up_to)
 {
-	int i;
+	int	i;
 
 	i = -1;
-	while(++i  < up_to)
+	while (++i < up_to)
 	{
-		pthread_join(data->philos[i].thread, NULL);
+		pthread_detach(data->philos[i].thread);
 	}
 }
 
-void ft_cleanup_forks(t_data *data, int up_to)
+void	ft_cleanup_forks(t_data *data, int up_to)
 {
-	int i;
+	int	i;
 
 	i = -1;
-	while(++i  < up_to)
+	while (++i < up_to)
 	{
 		pthread_mutex_destroy(&data->forks[i]);
 	}
 }
 
-int init_mutexes(t_data *data)
+int	init_semp(t_data *data)
 {
 	int	i;
 
@@ -43,7 +43,7 @@ int init_mutexes(t_data *data)
 		if (pthread_mutex_init(&(data->forks[i]), NULL))
 			return (ft_cleanup_forks(data, i), 0);
 	if (pthread_mutex_init(&(data->print_lock), NULL))
-			return (ft_cleanup_forks(data, i), 0);
+		return (ft_cleanup_forks(data, i), 0);
 	if (pthread_mutex_init(&(data->death_lock), NULL))
 		return (pthread_mutex_destroy(&(data->print_lock)), \
 				ft_cleanup_forks(data, i), 0);
@@ -58,7 +58,8 @@ int init_mutexes(t_data *data)
 int	init_philo_tools(t_data *data)
 {
 	int	i;
-	if(!init_mutexes(data))
+
+	if (!init_semp(data))
 		return (0);
 	i = -1;
 	while (++i < data->num_philos)
@@ -85,14 +86,15 @@ int	parse_init(int ac, char **av, t_data *data)
 	data->time_to_sleep = ft_atoi(av[4], &error);
 	data->meals_required = 0;
 	data->stop = 0;
+	data->crush = 0;
 	if (av[5])
 		data->meals_required = ft_atoi(av[5], &error);
 	if (error || data->num_philos > 200)
-		return (0);
+		return (write(2, "parse error\n", 12), 0);
 	data->forks = malloc(data->num_philos * sizeof(pthread_mutex_t));
 	if (!data->forks)
-		return (0);
+		return (write(2, "A FUNCTION FAILED !!\n", 21), 0);
 	if (!init_philo_tools(data))
-		return (free(data->forks), 0);
+		return (write(2, "A FUNCTION FAILED !!\n", 21), free(data->forks), 0);
 	return (1);
 }

@@ -12,11 +12,14 @@
 
 #include "philo.h"
 
-
-int init_mutexes(t_data *data)
+int	init_semp(t_data *data)
 {
-	data->forks =  sem_open("forks", O_CREAT, 0644, data->num_philos);
+	data->forks = sem_open("forks", O_CREAT, 0644, data->num_philos);
+	if (!data->forks)
+		return (0);
 	data->print_lock = sem_open("print", O_CREAT, 0644, 1);
+	if (!data->print_lock)
+		return (0);
 	data->philos = malloc((data->num_philos) * sizeof(t_philo));
 	if (!data->philos)
 		return (0);
@@ -26,7 +29,8 @@ int init_mutexes(t_data *data)
 int	init_philo_tools(t_data *data)
 {
 	int	i;
-	if(!init_mutexes(data))
+
+	if (!init_semp(data))
 		return (0);
 	i = -1;
 	while (++i < data->num_philos)
@@ -54,8 +58,8 @@ int	parse_init(int ac, char **av, t_data *data)
 	if (av[5])
 		data->meals_required = ft_atoi(av[5], &error);
 	if (error || data->num_philos > 200)
-		return (0);
+		return (write(2, "parse ERROR\n", 12), 0);
 	if (!init_philo_tools(data))
-		return (free(data->forks), 0);
+		return (write(2, "init ERROR !\n", 13), 0);
 	return (1);
 }

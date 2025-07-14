@@ -1,7 +1,7 @@
 NAME	= philo
 
-CC		= cc
-CFLAGS	= -Wall -Wextra -Werror -pthread -g 
+CC		= clang
+CFLAGS	=  -Wall -Wextra -Werror -pthread
 
 SRC		= main.c \
 		  parsing.c \
