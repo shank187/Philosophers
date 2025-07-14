@@ -14,7 +14,7 @@
 
 void	forks_pickup(t_philo *philo)
 {
-	if (philo->id == philo->data->num_philos)
+	if (!philo->id % 2)
 	{
 		if (pthread_mutex_lock(philo->right_fork))
 			philo->data->crush = 1;
