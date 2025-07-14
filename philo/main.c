@@ -29,10 +29,10 @@ void	*routine_philo(void *param)
 	philo = (t_philo *) param;
 	if (philo->data->num_philos == 1)
 		died_lonely_philo(philo);
+	if (philo->id % 2)
+		ft_usleep(1, philo->data);
 	while (are_u_alives(philo->data))
 	{
-		if (philo->id % 2)
-			ft_usleep(1, philo->data);
 		forks_pickup(philo);
 		eating_pastaa(philo);
 		if (philo->meals_eaten == philo->data->meals_required)
@@ -58,7 +58,6 @@ void	clean_up_simulation(t_data *data, int i)
 	free(data->forks);
 	free(data->philos);
 	free(data);
-	exit(j);
 }
 
 int	main(int ac, char **av)
@@ -81,6 +80,7 @@ int	main(int ac, char **av)
 	}
 	ft_usleep(1, data);
 	threads_waiter(data);
+	i = data->crush;
 	clean_up_simulation(data, data->num_philos);
-	return (0);
+	return (i);
 }

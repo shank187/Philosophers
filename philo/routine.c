@@ -62,12 +62,12 @@ int	search_for_dead_bodies(t_data *data)
 		> data->time_to_die)
 		{
 			if (pthread_mutex_lock(&data->death_lock))
-				handle_crushes(data);
+				data->crush = 1;
 			data->stop = 1;
 			if (pthread_mutex_unlock(&data->death_lock))
-				handle_crushes(data);
+				data->crush = 1;
 			if (pthread_mutex_lock(&data->print_lock))
-				handle_crushes(data);
+				data->crush = 1;
 			printf("%lld %i died\n", philo_get_time() - \
 				data->start_time, data->philos[i].id);
 			return (1);
@@ -103,7 +103,7 @@ void	threads_waiter(t_data *data)
 			break ;
 		else if (search_for_dead_bodies(data))
 			break ;
-		else if (data->crush)
+		if (data->crush)
 		{
 			write(2, "ERROR\n", 6);
 			break ;

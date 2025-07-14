@@ -1,7 +1,7 @@
 NAME	= philo
 
 CC		= clang
-CFLAGS	=   -Wall -Wextra -Werror -pthread
+CFLAGS	=  -fsanitize=thread -g -Wall -Wextra -Werror -pthread
 
 SRC		= main.c \
 		  parsing.c \

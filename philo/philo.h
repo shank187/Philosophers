@@ -60,6 +60,5 @@ void		eating_pastaa(t_philo *philo);
 void		threads_waiter(t_data *data);
 void		ft_cleanup_forks(t_data *data, int up_to);
 void		ft_cleanup_table(t_data *data, int up_to);
-void		handle_crushes(t_data *data);
 
 #endif

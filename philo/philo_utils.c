@@ -12,25 +12,17 @@
 
 #include "philo.h"
 
-void	handle_crushes(t_data *data)
-{
-	free(data->forks);
-	free(data->philos);
-	free(data);
-	write(2, "A FUNCTION FAILED !!\n", 21);
-	exit(1);
-}
 
 int	safe_printf(char *str, t_philo *philo)
 {
 	if (are_u_alives(philo->data))
 	{
 		if (pthread_mutex_lock(&philo->data->print_lock))
-			handle_crushes(philo->data);
+			philo->data->crush = 1;
 		printf("%lld %i %s\n", philo_get_time() - \
 			philo->data->start_time, philo->id, str);
 		if (pthread_mutex_unlock(&philo->data->print_lock))
-			handle_crushes(philo->data);
+			philo->data->crush = 1;
 		return (1);
 	}
 	return (0);
