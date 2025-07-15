@@ -15,11 +15,11 @@
 void	died_lonely_philo(t_philo *philo)
 {
 	if (pthread_mutex_lock(&philo->data->print_lock))
-		philo->data->crush = 1;
+		philo->data->crash = 1;
 	printf("%lld %i has taken a fork\n", philo_get_time() - \
 			philo->data->start_time, philo->id);
 	if (pthread_mutex_unlock(&philo->data->print_lock))
-		philo->data->crush = 1;
+		philo->data->crash = 1;
 }
 
 void	*routine_philo(void *param)
@@ -56,7 +56,7 @@ void	clean_up_simulation(t_data *data)
 	int	j;
 
 	usleep(100);
-	j = data->crush;
+	j = data->crash;
 	ft_cleanup_forks(data, data->num_philos);
 	pthread_mutex_destroy(&data->death_lock);
 	pthread_mutex_destroy(&data->print_lock);
@@ -94,7 +94,7 @@ int	main(int ac, char **av)
 	}
 	ft_usleep(1, data);
 	threads_waiter(data);
-	i = data->crush;
+	i = data->crash;
 	clean_up_simulation(data);
 	return (i);
 }

@@ -40,12 +40,12 @@ typedef struct s_data
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				meals_required;
-	atomic_int		stop;
+	int				stop;
 	long long		start_time;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	print_lock;
 	pthread_mutex_t	death_lock;
-	atomic_int		crush;
+	atomic_int		crash;
 	t_philo			*philos;
 }	t_data;
 

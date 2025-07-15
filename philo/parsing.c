@@ -75,7 +75,7 @@ int	parse_init(int ac, char **av, t_data *data)
 	data->time_to_sleep = ft_atoi(av[4], &error);
 	data->meals_required = 0;
 	data->stop = 0;
-	data->crush = 0;
+	data->crash = 0;
 	if (av[5])
 		data->meals_required = ft_atoi(av[5], &error);
 	if (error || data->num_philos > 200)

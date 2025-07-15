@@ -18,11 +18,11 @@ int	safe_printf(char *str, t_philo *philo)
 	if (are_u_alives(philo->data))
 	{
 		if (pthread_mutex_lock(&philo->data->print_lock))
-			philo->data->crush = 1;
+			philo->data->crash = 1;
 		printf("%lld %i %s\n", philo_get_time() - \
 			philo->data->start_time, philo->id, str);
 		if (pthread_mutex_unlock(&philo->data->print_lock))
-			philo->data->crush = 1;
+			philo->data->crash = 1;
 		return (1);
 	}
 	return (0);
@@ -34,13 +34,13 @@ int	are_u_alives(t_data *data)
 	if (!data->stop)
 	{
 		if (pthread_mutex_unlock(&data->death_lock))
-			data->crush = 1;
+			data->crash = 1;
 		return (1);
 	}
 	else
 	{
 		if (pthread_mutex_unlock(&data->death_lock))
-			data->crush = 1;
+			data->crash = 1;
 		return (0);
 	}
 }
@@ -66,7 +66,7 @@ int	ft_usleep(size_t milliseconds, t_data *data)
 		if (!are_u_alives(data))
 			return (0);
 		if (usleep(100))
-			return (data->crush = 1, 0);
+			return (data->crash = 1, 0);
 	}
 	return (1);
 }
