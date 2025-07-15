@@ -79,7 +79,7 @@ int	parse_init(int ac, char **av, t_data *data)
 	if (av[5])
 		data->meals_required = ft_atoi(av[5], &error);
 	if (error || data->num_philos > 200)
-		return (write(2, "parse error\n", 12), 0);
+		return (write(2, "error\n", 6), 0);
 	data->forks = malloc(data->num_philos * sizeof(pthread_mutex_t));
 	if (!data->forks)
 		return (write(2, "A FUNCTION FAILED !!\n", 21), 0);

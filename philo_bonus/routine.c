@@ -21,9 +21,9 @@ void	died_lonely_philo(t_philo *philo)
 		handle_crushes(philo->data, 1);
 	printf("%lld %i has taken a fork\n", philo_get_time() - \
 		philo->data->start_time, philo->id);
+	ft_usleep(philo->data->time_to_die, philo);
 	if (sem_post(philo->data->print_lock))
 		handle_crushes(philo->data, 1);
-	ft_usleep(philo->data->time_to_die, philo);
 	clean_resources(philo->data, 1);
 	exit(i);
 }
@@ -62,9 +62,9 @@ void	routine_philo(t_philo *philo)
 {
 	int	i;
 
+	philo->last_meal_time = philo_get_time();
 	if (philo->data->num_philos == 1)
 		died_lonely_philo(philo);
-	philo->last_meal_time = philo_get_time();
 	while (am_i_alive(philo))
 	{
 		if (philo->id % 2)

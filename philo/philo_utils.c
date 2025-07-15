@@ -66,7 +66,7 @@ int	ft_usleep(size_t milliseconds, t_data *data)
 		if (!are_u_alives(data))
 			return (0);
 		if (usleep(100))
-			data->crush = 1;
+			return (data->crush = 1, 0);
 	}
 	return (1);
 }

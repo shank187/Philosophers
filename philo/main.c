@@ -39,9 +39,14 @@ void	*routine_philo(void *param)
 			break ;
 		if (are_u_alives(philo->data))
 			safe_printf("is sleeping", philo);
-		ft_usleep(philo->data->time_to_sleep, philo->data);
+		else
+			break ;
+		if (!ft_usleep(philo->data->time_to_sleep, philo->data))
+			break ;
 		if (are_u_alives(philo->data))
 			safe_printf("is thinking", philo);
+		else
+			break ;
 	}
 	return (NULL);
 }
@@ -50,6 +55,7 @@ void	clean_up_simulation(t_data *data)
 {
 	int	j;
 
+	usleep(100);
 	j = data->crush;
 	ft_cleanup_forks(data, data->num_philos);
 	pthread_mutex_destroy(&data->death_lock);
@@ -59,6 +65,11 @@ void	clean_up_simulation(t_data *data)
 	free(data);
 }
 
+// void func(void)
+// {
+// 	system("leaks philo");
+// }
+
 int	main(int ac, char **av)
 {
 	t_data	*data;
@@ -66,6 +77,7 @@ int	main(int ac, char **av)
 
 	i = -1;
 	data = malloc(sizeof(t_data));
+	// atexit(func);
 	if (!data || !parse_init(ac, av, data))
 		return (free(data), 1);
 	data->start_time = philo_get_time();

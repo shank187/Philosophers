@@ -58,7 +58,7 @@ int	parse_init(int ac, char **av, t_data *data)
 	if (av[5])
 		data->meals_required = ft_atoi(av[5], &error);
 	if (error || data->num_philos > 200)
-		return (write(2, "parse ERROR\n", 12), 0);
+		return (write(2, "ERROR\n", 6), 0);
 	if (!init_philo_tools(data))
 		return (write(2, "init ERROR !\n", 13), 0);
 	return (1);

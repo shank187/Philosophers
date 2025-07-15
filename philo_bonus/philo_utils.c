@@ -57,8 +57,11 @@ void	ft_usleep(size_t millisecond, t_philo *philo)
 	while ((philo_get_time() - start) < millisecond)
 	{
 		if (!am_i_alive(philo))
-			return (clean_resources(philo->data, 1), exit(i));
-		if (usleep(1000))
+		{
+			clean_resources(philo->data, 1);
+			exit(0);
+		}
+		if (usleep(100))
 			handle_crushes(philo->data, 1);
 	}
 }

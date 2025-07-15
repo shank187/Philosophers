@@ -17,7 +17,6 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <sys/time.h>
-# include <stdatomic.h> 
 # include <semaphore.h>
 # include <fcntl.h>
 # include <sys/wait.h>
@@ -28,25 +27,25 @@ typedef struct s_data	t_data;
 
 typedef struct s_philo
 {
-	int				id;
-	pid_t			child_pid;
-	atomic_int		meals_eaten;
-	atomic_llong	last_meal_time;
-	t_data			*data;
+	int			id;
+	pid_t		child_pid;
+	int			meals_eaten;
+	long long	last_meal_time;
+	t_data		*data;
 }	t_philo;
 
 typedef struct s_data
 {
-	int				num_philos;
-	int				time_to_die;
-	int				time_to_eat;
-	int				time_to_sleep;
-	int				meals_required;
-	_Atomic int		stop;
-	long long		start_time;
-	sem_t			*forks;
-	sem_t			*print_lock;
-	t_philo			*philos;
+	int			num_philos;
+	int			time_to_die;
+	int			time_to_eat;
+	int			time_to_sleep;
+	int			meals_required;
+	int			stop;
+	long long	start_time;
+	sem_t		*forks;
+	sem_t		*print_lock;
+	t_philo		*philos;
 }	t_data;
 
 int			ft_atoi(const char *str, int *error);
