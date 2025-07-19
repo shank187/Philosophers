@@ -6,7 +6,7 @@
 /*   By: aelbour <aelbour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:58:34 by aelbour           #+#    #+#             */
-/*   Updated: 2025/07/13 11:30:25 by aelbour          ###   ########.fr       */
+/*   Updated: 2025/07/16 16:40:05 by aelbour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,10 @@ void	*routine_philo(void *param)
 
 	philo = (t_philo *) param;
 	if (philo->data->num_philos == 1)
+	{
 		died_lonely_philo(philo);
+		return (NULL);
+	}
 	if (philo->id % 2)
 		ft_usleep(1, philo->data);
 	while (are_u_alives(philo->data))
