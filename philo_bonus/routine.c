@@ -6,7 +6,7 @@
 /*   By: aelbour <aelbour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/10 13:23:26 by aelbour           #+#    #+#             */
-/*   Updated: 2025/07/13 11:27:26 by aelbour          ###   ########.fr       */
+/*   Updated: 2025/07/19 10:05:48 by aelbour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,6 @@ void	died_lonely_philo(t_philo *philo)
 		handle_crushes(philo->data, 1);
 	clean_resources(philo->data, 1);
 	exit(i);
-}
-
-int	am_i_alive(t_philo *philo)
-{
-	if (philo_get_time() - philo->last_meal_time \
-	> philo->data->time_to_die)
-		return (0);
-	return (1);
 }
 
 void	forks_pickup(t_philo *philo)
@@ -58,17 +50,30 @@ void	eating_pastaa(t_philo *philo)
 	philo->meals_eaten++;
 }
 
+void	*watch_him(void *param)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *)param;
+	while (philo_get_time() - philo->last_meal_time <= philo->data->time_to_die)
+		usleep(100);
+	exit(philo->id);
+}
+
 void	routine_philo(t_philo *philo)
 {
-	int	i;
+	int			i;
+	pthread_t	ripper;
 
 	philo->last_meal_time = philo_get_time();
 	if (philo->data->num_philos == 1)
 		died_lonely_philo(philo);
+	pthread_create(&ripper, NULL, watch_him, philo);
+	pthread_detach(ripper);
 	while (am_i_alive(philo))
 	{
 		if (philo->id % 2)
-			ft_usleep(1, philo);
+			ft_usleep(7, philo);
 		forks_pickup(philo);
 		eating_pastaa(philo);
 		if (philo->meals_eaten == philo->data->meals_required)

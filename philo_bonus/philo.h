@@ -6,7 +6,7 @@
 /*   By: aelbour <aelbour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:27:13 by aelbour           #+#    #+#             */
-/*   Updated: 2025/07/13 11:00:12 by aelbour          ###   ########.fr       */
+/*   Updated: 2025/07/19 10:44:29 by aelbour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,18 @@
 # include <sys/wait.h>
 # include <errno.h>
 # include <signal.h>
+# include <pthread.h>
+# include <stdatomic.h> 
 
 typedef struct s_data	t_data;
 
 typedef struct s_philo
 {
-	int			id;
-	pid_t		child_pid;
-	int			meals_eaten;
-	long long	last_meal_time;
-	t_data		*data;
+	int				id;
+	pid_t			child_pid;
+	int				meals_eaten;
+	atomic_llong	last_meal_time;
+	t_data			*data;
 }	t_philo;
 
 typedef struct s_data

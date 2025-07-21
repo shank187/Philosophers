@@ -6,11 +6,19 @@
 /*   By: aelbour <aelbour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/21 15:40:43 by aelbour           #+#    #+#             */
-/*   Updated: 2025/07/13 11:25:43 by aelbour          ###   ########.fr       */
+/*   Updated: 2025/07/19 10:05:11 by aelbour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+int	am_i_alive(t_philo *philo)
+{
+	if (philo_get_time() - philo->last_meal_time \
+	> philo->data->time_to_die)
+		return (0);
+	return (1);
+}
 
 void	handle_crushes(t_data *data, int is_child)
 {
