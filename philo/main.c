@@ -6,7 +6,7 @@
 /*   By: aelbour <aelbour@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/17 14:58:34 by aelbour           #+#    #+#             */
-/*   Updated: 2025/07/16 16:40:05 by aelbour          ###   ########.fr       */
+/*   Updated: 2025/07/19 10:15:08 by aelbour          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,6 @@ void	clean_up_simulation(t_data *data)
 	free(data);
 }
 
-// void func(void)
-// {
-// 	system("leaks philo");
-// }
 
 int	main(int ac, char **av)
 {
@@ -80,7 +76,6 @@ int	main(int ac, char **av)
 
 	i = -1;
 	data = malloc(sizeof(t_data));
-	// atexit(func);
 	if (!data || !parse_init(ac, av, data))
 		return (free(data), 1);
 	data->start_time = philo_get_time();
